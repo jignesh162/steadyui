@@ -1,0 +1,51 @@
+<div *ngIf="!isLoggedIn">
+  <div class="p-grid p-justify-center">
+    <div class="p-sm-12 p-md-9 p-lg-5">
+      <div class="p-grid p-justify-center">
+        <div class="p-sm-12 p-md-6 p-lg-6">
+          <p-card header="{{'login.header' | translate}}" styleClass="ui-card-shadow">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="p-grid">
+                <div class="p-col-12">
+                  <div class="p-sm-12 p-md-12 p-lg-12"><label>{{'login.username' | translate}}</label></div>
+                  <div class="p-sm-12 p-md-12 p-lg-12">
+                    <input pInputText type="text" id="username" formControlName="username" />
+                  </div>
+                  <div class="p-sm-12 p-md-12 p-lg-12" *ngIf="f['username'].errors && f['username'].dirty">
+                    <div *ngIf="f['username'].errors.required">
+                      <span class="error">{{'validations.mandatory' | translate}}</span>
+                    </div>
+                    <div *ngIf="f['username'].errors.maxlength">
+                      <span
+                        class="error">{{'validations.maxlength' | translate:{requiredLength:f['username'].errors.maxlength.requiredLength} }}</span>
+                    </div>
+                  </div>
+                  <div class="p-sm-12 p-md-12 p-lg-12"><label>{{'login.password' | translate}}</label></div>
+                  <div class="p-sm-12 p-md-12 p-lg-12">
+                    <input pPassword type="password" id="password" formControlName="password" [feedback]="false" />
+                  </div>
+                  <div class="p-sm-12 p-md-12 p-lg-12" *ngIf="f['password'].errors && f['password'].dirty">
+                    <div *ngIf="f['password'].errors.required">
+                      <span class="error">{{'validations.mandatory' | translate}}</span>
+                    </div>
+                    <div *ngIf="f['password'].errors.maxlength">
+                      <span
+                        class="error">{{'validations.maxlength' | translate:{requiredLength:f['password'].errors.maxlength.requiredLength} }}</span>
+                    </div>
+                  </div>
+                  <div class="p-sm-12 p-md-12 p-lg-12" *ngIf="loginErrorMessage">
+                    <span class="error">{{loginErrorMessage}}</span>
+                  </div>
+                  <div class="p-sm-12 p-md-12 p-lg-12">
+                    <button pButton label="{{'buttons.login.label' | translate}}" type="submit" icon="pi pi-sign-in"
+                      style="margin-left: 0.5em;" class="ui-button-success"></button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </p-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

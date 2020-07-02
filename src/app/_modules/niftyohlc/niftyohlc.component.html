@@ -1,0 +1,49 @@
+<app-menu></app-menu>
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+<p-confirmDialog [style]="{width: '25vw'}"></p-confirmDialog>
+
+<div *ngIf="isAdmin">
+  <!-- Nifty OHLC table -->
+  <p-table #dt [columns]="niftyohlcColumns" [value]="niftyohlcs" dataKey="id" [paginator]="true" [rows]="22"
+    [responsive]="true" sortField="modified" [sortOrder]="-1" [resizableColumns]="true" columnResizeMode="expand">
+    <!-- Table caption area -->
+    <ng-template pTemplate="caption">
+      <div class="ui-helper-clearfix" style="text-align: center">
+        <button pButton class="alignleft" label="{{'buttons.niftyohlc.excel.label' | translate}}"
+          icon="pi pi-file-excel" (click)="exportExcel()"
+          pTooltip="{{'buttons.niftyohlc.excel.tooltip' | translate}}"></button>
+        <i class="pi pi-search alignleft" style="margin:8px 8px 0 0"></i>
+        <input class="alignleft" type="text" pInputText placeholder="{{'niftyohlc.table.globalFilter' | translate}}"
+          (input)="dt.filterGlobal($event.target.value, 'contains')">
+      </div>
+    </ng-template>
+    <!-- Table header area -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" class="{{col.priorityClass}}" [pSortableColumn]="col.field" pResizableColumn>
+          {{col.translationKey | translate}}
+        </th>
+      </tr>
+    </ng-template>
+    <!-- Table body area -->
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+      <tr [pSelectableRow]="rowData"
+      [ngClass]="rowData.type == '1W' ? 'highlight-row' : null">
+        <td *ngFor="let col of columns" class="{{col.priorityClass}}" class="ui-resizable-column">
+          <div *ngIf="col.type === 'date'">
+            {{rowData[col.field] | date:'yyyy-MM-dd'}}
+          </div>
+          <div *ngIf="col.type === 'time' && rowData['type'] == 'D'">
+            {{rowData[col.field] | date : 'mediumTime'}}
+          </div>
+          <div *ngIf="col.type === 'time' && rowData['type'] != 'D'">
+            {{rowData[col.field] | date : "yyyy-MM-dd h:mm a"}}
+          </div>
+          <div *ngIf="col.type !== 'date' && col.type !== 'time'">
+            {{rowData[col.field]}}
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

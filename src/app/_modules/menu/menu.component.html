@@ -1,0 +1,10 @@
+<div *ngIf="isLoggedIn">
+  <p-menubar [model]="items">
+    <div>
+      <b>{{environmentName}} </b>
+      <label>{{'menu.username' | translate}}</label>{{username}}
+      <button pButton label="{{'buttons.logout.label' | translate}}" icon="pi pi-sign-out" style="margin-left:.25em"
+        (click)="logout()"></button>
+    </div>
+  </p-menubar>
+</div>

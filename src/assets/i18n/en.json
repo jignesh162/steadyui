@@ -1,0 +1,187 @@
+{
+    "app" : {
+        "title" : "Steady"
+    },
+    "login" : {
+        "header" : "Please log in",
+        "username" : "Username",
+        "password" : "Password"
+    },
+    "menu" : {
+        "username" : "User name: "
+    },
+    "niftyohlc" : {
+      "table" : {
+          "title" : "Nifty OHLC",
+          "globalFilter" : "Filter table"
+      },
+      "type" : "Type",
+      "startDate" : "Start",
+      "endDate" : "End",
+      "high" : "Highest",
+      "highTime" : "High Time",
+      "low" : "Lowest",
+      "lowTime" : "Low Time",
+      "open" : "Open",
+      "close" : "Close",
+      "up" : "Up",
+      "down" : "Down"
+    },
+    "strategy" : {
+      "table" : {
+        "title" : "Strategy",
+        "globalFilter" : "Filter table"
+      },
+      "entryDateTime" : {
+        "select" : {
+            "label" : "Entry time"
+        }
+      },
+      "exitDateTime" : {
+        "select" : {
+            "label" : "Exit time"
+        }
+      },
+      "stopLossPercentage" : {
+        "select" : {
+            "label" : "SL %"
+        }
+      },
+      "profitBookPercentage" : {
+        "select" : {
+            "label" : "Profit %"
+        }
+      },
+      "initialAmount" : {
+        "select" : {
+            "label" : "Amount"
+        }
+      },
+      "strikeAwayPoints" : {
+        "select" : {
+            "label" : "Strike Away"
+        }
+      },
+      "quantityOrPrice" : {
+        "select" : {
+            "label" : "Quantity or Price"
+        }
+      },
+      "columns" : {
+        "investmentAmount" : "Amount",
+        "highestAmountGoesTo" : "H. Amount",
+        "highestPercentage" : "H. %",
+        "lowestAmountGoesTo" : "L. Amount",
+        "lowestPercentage" : "L. %",
+        "stopLoss" : "Stop loss",
+        "profitBook" : "Profit Book",
+        "stopLossHitDateTime" : "Stop loss DT",
+        "triggeredStopLossPercentage" : "SL hit %",
+        "profitBookHitDateTime" : "Profit Book DT",
+        "triggeredProfitBookPercentage" : "PB hit %",
+        "finalAmount" : "Final",
+        "strategyInput" : {
+            "tooltip" : "Strategy input data provided by user to process"
+        },
+        "investmentDetails" : {
+            "tooltip" : "Calculated price/strike data"
+        },
+        "initialAmount" : "Intial",
+        "buy" : "Buy",
+        "sell" : "Sell",
+        "highest" : "Highest",
+        "lowest" : "Lowest",
+        "profitOrLoss" : "Profit or loss",
+        "deInvestmentAmount" : "DeInvestment",
+        "balanceAmount" : "Balance"
+      },
+      "strategyInputPanel" : {
+          "header" : "Strategy input provided by user to calculate profit/loss",
+          "entryDateTime" : "Entry date time: ",
+          "exitDateTime" : "Exit date time: ",
+          "initialAmount" : "Initial amount: ",
+          "stopLossPercentage" : "Stop loss percentage: ",
+          "profitBookPercentage" : "Profit book percentage: ",
+          "quantityOrPrice" : "Qty or price: ",
+          "strikeAwayPoints" : "Strike away points: "
+      },
+      "buyDetailsPanel" : {
+        "header" : "Buy details and options calculated values by system",
+        "strikeUsed" : "Strike used: ",
+        "expiryDate" : "Expiry date: ",
+        "peOptionsId" : "PE options id: ",
+        "ceOptionsId" : "CE option id: ",
+        "peLotQty" : "PE Lots: ",
+        "peBuyPrice" : "PE price: ",
+        "peBuyPricePerLot" : "PE price per lot: ",
+        "peBuyAmount" : "PE investment: ",
+        "ceLotQty" : "CE Lots: ",
+        "ceBuyPrice" : "CE price: ",
+        "ceBuyPricePerLot" : "CE price per lot: ",
+        "ceBuyAmount" : "CE investment: "
+      },
+      "sellDetailsPanel" : {
+        "header" : "Sell details and options calculated values by system",
+        "peSellPrice" : "PE price: ",
+        "peSellPricePerLot" : "PE price per lot: ",
+        "peSellAmount" : "PE deinvestment: ",
+        "ceSellPrice" : "CE price: ",
+        "ceSellPricePerLot" : "CE price per lot: ",
+        "ceSellAmount" : "CE deinvestment: "
+      }
+    },
+    "topMenuBar" : [{
+        "label" : "NiftyOHLC",
+        "icon" : "pi pi-list",
+        "routerLink" : "/niftyohlc",
+        "roles" : [],
+        "visible" : true
+        }, {
+          "label" : "Strategy",
+          "icon" : "pi pi-chart-line",
+          "routerLink" : "/strategy",
+          "roles" : [],
+          "visible" : true
+          }],
+    "confirmation" : {
+        "message" : "Are you sure that you want to proceed?",
+        "header" : "Confirmation",
+        "acceptLabel" : "Yes",
+        "rejectLabel" : "No"
+    },
+    "buttons" : {
+        "close" : {
+            "label" : "Close"
+        },
+        "login" : {
+            "label" : "Login"
+        },
+        "logout" : {
+            "label" : "Logout"
+        },
+        "yes" : "Yes",
+        "no" : "No",
+        "niftyohlc" : {
+            "excel" : {
+                "label" : "Excel",
+                "tooltip" : "Download data in Excel format"
+            }
+        },
+        "strategy" : {
+          "excel" : {
+              "label" : "Excel",
+              "tooltip" : "Download data in Excel format"
+          }
+      }
+    },
+    "validations" : {
+        "mandatory" : "Mandatory field",
+        "maxlength" : "Maximum allowed length is {{requiredLength}} chars only"
+    },
+    "dropdownLists" : {
+      "quantityOrPriceItems" : [
+          { "label" : "Price", "value" : "price" },
+          { "label" : "Quantity", "value" : "quantity" }
+      ]
+    }
+}

@@ -1,0 +1,364 @@
+<app-menu></app-menu>
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+<p-confirmDialog [style]="{width: '25vw'}"></p-confirmDialog>
+
+<form [formGroup]="strategyForm">
+  <div class="form-group ui-g ui-fluid">
+    <div class="p-col-12 p-sm-4 p-md-4 p-lg-2 p-xl-2">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.entryDateTime.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <p-calendar formControlName="entryDateTime" [monthNavigator]="true" [yearNavigator]="true"
+          dateFormat="yy-mm-dd" yearRange="2018:2019" showTime="true" showSeconds="true" hourFormat="24" selectionMode="single"
+          dataType="string"></p-calendar>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-4 p-lg-2 p-xl-2">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.exitDateTime.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <p-calendar formControlName="exitDateTime" [monthNavigator]="true" [yearNavigator]="true"
+          dateFormat="yy-mm-dd" yearRange="2018:2019" showTime="true" showSeconds="true" hourFormat="24" selectionMode="single"
+          dataType="string"></p-calendar>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-1 p-xl-1">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.stopLossPercentage.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <input pInputText formControlName="stopLossPercentage" type="text" />
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-1 p-xl-1">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.profitBookPercentage.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <input pInputText formControlName="profitBookPercentage" type="text" />
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-1 p-xl-1">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.initialAmount.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <input pInputText formControlName="initialAmount" type="text" />
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-1 p-xl-1">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.strikeAwayPoints.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <input pInputText formControlName="strikeAwayPoints" type="text" />
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-1 p-xl-1">
+      <div class="p-col-12">
+        <label class="fontClass">{{
+          "strategy.quantityOrPrice.select.label" | translate
+        }}</label>
+      </div>
+      <div class="p-col-12">
+        <p-dropdown formControlName="quantityOrPrice" [options]="quantityOrPriceItems"></p-dropdown>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-md-2 p-lg-2 p-xl-2">
+      <div class="p-col-12">&nbsp;</div>
+      <div class="p-col-12">
+        <button pButton type="submit" icon="pi pi-search" style="margin-left: 0.5em;"
+          (click)="runStrategy()"></button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-table #dt [columns]="strategyColumns" [value]="strategyData" dataKey="id" [paginator]="true" [rows]="17"
+  [responsive]="true" sortMode="multiple" [resizableColumns]="true" columnResizeMode="expand" [globalFilterFields]="globalFilterFields">
+  <!-- Table caption area -->
+  <ng-template pTemplate="caption">
+    <div class="ui-helper-clearfix alignCenter">
+      <button pButton class="alignleft" label="{{ 'buttons.strategy.excel.label' | translate }}"
+        icon="pi pi-file-excel" (click)="exportExcel()"
+        pTooltip="{{ 'buttons.strategy.excel.tooltip' | translate }}"></button>
+      <input class="alignleft" type="text" pInputText placeholder="{{ 'strategy.table.globalFilter' | translate }}"
+        (input)="dt.filterGlobal($event.target.value, 'contains')" />
+    </div>
+  </ng-template>
+  <!-- Table header area -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" style="width: {{ col.widthPercentage }}" class="{{ col.priorityClass }}"
+        [pSortableColumn]="col.field" pResizableColumn>
+        <div *ngIf="col.type === 'strategyInputPanel' || col.type === 'buyDetailsPanel' || col.type === 'sellDetailsPanel'">
+          <i class="{{ col.icon }}" pTooltip="{{ col.translationKey | translate }}"></i>
+        </div>
+        <div *ngIf="col.field !== 'blank'">
+          {{ col.translationKey | translate }}
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <!-- Table body area -->
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td *ngFor="let col of columns" style="width: {{ col.widthPercentage }}"
+        class="{{ col.priorityClass }} ui-resizable-column">
+        <div *ngIf="col.type === 'strategyInputPanel'">
+          <div class="alignCenter">
+            <a (click)="
+                showSystemTableDataInOverlay(
+                  $event,
+                  rowData,
+                  strategyInputPanel
+                )
+              ">
+              <i [ngClass]="'pi pi-search-plus ui-clickable'"></i>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="col.type === 'buyDetailsPanel'">
+          <div class="alignCenter">
+            <a (click)="
+                showSystemTableDataInOverlay(
+                  $event,
+                  rowData,
+                  buyDetailsPanel
+                )
+              ">
+              <i [ngClass]="'pi pi-search-plus ui-clickable'"></i>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="col.type === 'sellDetailsPanel'">
+          <div class="alignCenter">
+            <a (click)="
+                showSystemTableDataInOverlay(
+                  $event,
+                  rowData,
+                  sellDetailsPanel
+                )
+              ">
+              <i [ngClass]="'pi pi-search-plus ui-clickable'"></i>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="col.type === 'date'">
+          {{rowData[col.field] | date : "yyyy-MM-dd h:mm a"}}
+        </div>
+        <div *ngIf="col.type === 'currency'">
+          {{rowData[col.field] | currency:'INR'}}
+        </div>
+        <div *ngIf="col.type === 'combined'">
+          <span [ngClass]="rowData[col.amountField] < 0 ? 'minusAmount' : null">{{rowData[col.amountField] | currency:'INR'}}<sub>({{rowData[col.perField]}})% {{rowData[col.dateField] | date : "yyyy-MM-dd hh:mm:ss"}}</sub></span>
+        </div>
+
+        <div *ngIf="col.type === 'string' && col.type !== 'date' && col.field !== 'blank' && col.type !== 'currency' && col.type !== 'combined'">
+          {{ rowData[col.field] }}
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<ngx-charts-line-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [timeline]="timeline"
+  [results]="chartData"
+  [autoScale]="autoScale"
+  >
+  <ng-template #seriesTooltipTemplate let-model="model">
+    <pre>{{model[0].name | date: "yyyy-MM-dd hh:mm:ss"}}</pre>
+    <pre>CE: {{model[0].value | currency:'INR'}}</pre>
+    <pre>PE: {{model[1].value | currency:'INR'}}</pre>
+  </ng-template>
+
+  <ng-template #tooltipTemplate let-model="model">
+    <pre>{{model.name | date: "yyyy-MM-dd hh:mm:ss"}}</pre>
+    <pre>{{model.value | currency:'INR'}}</pre>
+  </ng-template>
+</ngx-charts-line-chart>
+
+<p-overlayPanel #strategyInputPanel [dismissable]="true">
+  <ng-template pTemplate>
+    <div class="ui-fluid" *ngIf="selectedStrategyResponseModel" style="width: 400px;">
+      <div class="ui-g-12 alignCenter">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.header" | translate
+        }}</b>
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.entryDateTime" | translate
+        }}</b>{{ selectedStrategyResponseModel.entryDateTime | date: "yyyy-MM-dd hh:mm:ss" }}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.exitDateTime" | translate
+        }}</b>{{ selectedStrategyResponseModel.exitDateTime | date: "yyyy-MM-dd hh:mm:ss" }}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.initialAmount" | translate
+        }}</b>{{ selectedStrategyResponseModel.initialAmount | currency:'INR'}}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.stopLossPercentage" | translate
+        }}</b>{{ selectedStrategyResponseModel.stopLossPercentage }}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.profitBookPercentage" | translate
+        }}</b>{{ selectedStrategyResponseModel.profitBookPercentage}}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.quantityOrPrice" | translate
+        }}</b>{{ selectedStrategyResponseModel.quantityOrPrice }}
+      </div>
+      <div class="ui-g-12">
+        <b class="lightBlueColor">{{
+          "strategy.strategyInputPanel.strikeAwayPoints" | translate
+        }}</b>{{ selectedStrategyResponseModel.strikeAwayPoints }}
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel #buyDetailsPanel [dismissable]="true">
+  <ng-template pTemplate>
+    <div class="ui-fluid" *ngIf="selectedStrategyResponseModel" style="width: 800px;">
+      <div class="ui-g-12 alignCenter">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.header" | translate
+        }}</b>
+      </div>
+      <div class="ui-g-6">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.strikeUsed" | translate
+        }}</b>{{ selectedStrategyResponseModel.strikeUsed }}
+      </div>
+      <div class="ui-g-6">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.expiryDate" | translate
+        }}</b>{{ selectedStrategyResponseModel.expiryDate | date: "yyyy-MM-dd" }}
+      </div>
+      <div class="ui-g-6">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.peOptionsId" | translate
+        }}</b>{{ selectedStrategyResponseModel.peOptionsId }}
+      </div>
+      <div class="ui-g-6">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.ceOptionsId" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceOptionsId }}
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.peLotQty" | translate
+        }}</b>{{ selectedStrategyResponseModel.peLotQty}}
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.peBuyPrice" | translate
+        }}</b>{{ selectedStrategyResponseModel.peBuyPrice | currency:'INR'}}
+      </div>
+      <div class="ui-g-4">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.peBuyPricePerLot" | translate
+        }}</b>{{ selectedStrategyResponseModel.peBuyPricePerLot | currency:'INR'}}
+      </div>
+      <div class="ui-g-4">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.peBuyAmount" | translate
+        }}</b>{{ selectedStrategyResponseModel.peBuyAmount | currency:'INR'}}
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.ceLotQty" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceLotQty}}
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.ceBuyPrice" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceBuyPrice | currency:'INR'}}
+      </div>
+      <div class="ui-g-4">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.ceBuyPricePerLot" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceBuyPricePerLot | currency:'INR'}}
+      </div>
+      <div class="ui-g-4">
+        <b class="lightBlueColor">{{
+          "strategy.buyDetailsPanel.ceBuyAmount" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceBuyAmount | currency:'INR'}}
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel #sellDetailsPanel [dismissable]="true">
+  <ng-template pTemplate>
+    <div class="ui-fluid" *ngIf="selectedStrategyResponseModel" style="width: 800px;">
+      <div class="ui-g-12 alignCenter">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.header" | translate
+        }}</b>
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.peSellPrice" | translate
+        }}</b>{{ selectedStrategyResponseModel.peSellPrice | currency:'INR'}}
+      </div>
+      <div class="ui-g-5">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.peSellPricePerLot" | translate
+        }}</b>{{ selectedStrategyResponseModel.peSellPricePerLot | currency:'INR'}}
+      </div>
+      <div class="ui-g-5">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.peSellAmount" | translate
+        }}</b>{{ selectedStrategyResponseModel.peSellAmount | currency:'INR'}}
+      </div>
+      <div class="ui-g-2">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.ceSellPrice" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceSellPrice | currency:'INR'}}
+      </div>
+      <div class="ui-g-5">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.ceSellPricePerLot" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceSellPricePerLot | currency:'INR'}}
+      </div>
+      <div class="ui-g-5">
+        <b class="lightBlueColor">{{
+          "strategy.sellDetailsPanel.ceSellAmount" | translate
+        }}</b>{{ selectedStrategyResponseModel.ceSellAmount | currency:'INR'}}
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>

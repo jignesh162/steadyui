@@ -1,0 +1,34 @@
+.error {
+    color: #a94442;
+  }
+  
+.highlight-row {
+    background-color: #1CA979 !important;
+    color: #ffffff !important;
+}
+
+.fontClass {
+    font-family: "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.alignleft {
+    margin-left: 0.5em;
+	text-align: left;
+}
+
+.alignleft {
+    margin-right: 0.5em;
+	text-align: left;
+}
+
+.ui-multiselect {
+    display: center;
+}
+
+.ui-g-1, .ui-g-2, .ui-g-3, .ui-g-4, .ui-g-5, .ui-g-6, .ui-g-7, .ui-g-8, .ui-g-9, .ui-g-10, .ui-g-11, .ui-g-12 {
+    float: left;
+    box-sizing: border-box;
+    padding: .2em;
+}
